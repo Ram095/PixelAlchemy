@@ -61,7 +61,8 @@ export async function POST(req: Request) {
   if (eventType === "user.created") {
     const { id, email_addresses, image_url, first_name, last_name, username } =
       evt.data;
-
+    debugger;
+    console.error("User created 1");
     const user = {
       clerkId: id,
       email: email_addresses[0].email_address,
@@ -70,16 +71,18 @@ export async function POST(req: Request) {
       lastName: last_name ?? "",
       photo: image_url,
     };
-
+    console.error("User created 2", user);
     const newUser = await createUser(user);
 
     // Set public metadata
     if (newUser) {
+      console.error("User created 3", newUser);
       await clerkClient.users.updateUserMetadata(id, {
         publicMetadata: {
           userId: newUser._id,
         },
       });
+      console.error("User created 4", newUser);
     }
 
     return NextResponse.json({ message: "OK", user: newUser });
